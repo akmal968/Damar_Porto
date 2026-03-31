@@ -1,0 +1,5 @@
+{
+  "name": "Portfolio Pro",
+  "description": "A professional portfolio website with a full admin CRUD dashboard powered by Supabase.",
+  "requestFramePermissions": []
+}
