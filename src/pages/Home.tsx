@@ -46,17 +46,7 @@ export default function Home() {
         supabase.from('achievements').select('*').order('date', { ascending: false })
       ]);
 
-      if (profileData) {
-        setProfile(profileData);
-        // Start typing animation after profile is loaded
-        let i = 0;
-        const fullText = profileData.bio || '';
-        const timer = setInterval(() => {
-          setDisplayText(fullText.slice(0, i));
-          i++;
-          if (i > fullText.length) clearInterval(timer);
-        }, 30);
-      }
+      if (profileData) setProfile(profileData);
       if (eduData) setEducation(eduData);
       if (expData) setExperience(expData);
       if (skillData) setSkills(skillData);
@@ -67,6 +57,20 @@ export default function Home() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!profile?.bio) return;
+    
+    let i = 0;
+    const fullText = profile.bio;
+    const timer = setInterval(() => {
+      setDisplayText(fullText.slice(0, i));
+      i++;
+      if (i > fullText.length) clearInterval(timer);
+    }, 15);
+    
+    return () => clearInterval(timer);
+  }, [profile?.bio]);
 
   if (loading) {
     return (
@@ -143,7 +147,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-base md:text-xl text-zinc-400 leading-relaxed max-w-2xl mb-10 font-mono min-h-[6rem] md:min-h-[4rem]"
+                className="text-base md:text-xl text-zinc-400 leading-relaxed max-w-2xl mx-auto md:mx-0 mb-10 font-mono min-h-[4rem] md:min-h-[4rem]"
               >
                 <span className="text-brand-primary mr-2">{'>'}</span>
                 {displayText}
